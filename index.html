@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registro / Inicio</title>
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body class="registro-pagina">
+    <div class="contenedor">
+        <div class="panel">
+            <h2>Cuenta existente</h2>
+            <p>Agrega una cuenta que ya tengas.</p>
+            <button onclick="abrirFormulario('iniciar')">Conectar cuenta</button>
+        </div>
+
+        <div class="panel">
+            <h2>Nueva cuenta personal</h2>
+            <p>Crea una cuenta con otra dirección de correo electrónico.</p>
+            <button onclick="abrirFormulario('registrar')">Crear</button>
+        </div>
+    </div>
+
+    <div id="modal" class="modal oculto">
+        <div class="modal-contenido">
+            <h2 id="titulo-formulario">Formulario</h2>
+            <p id="descripcion-formulario">Completa los campos para continuar</p>
+            <form id="formulario">
+                <label for="correo">Correo electrónico</label>
+                <input type="email" id="correo" placeholder="Correo electrónico" required />
+
+                <label for="clave">Contraseña</label>
+                <input type="password" id="clave" placeholder="Crea una contraseña" required />
+
+                <small>Usa ocho o más letras, números y símbolos</small>
+
+                <div id="grupo-fecha-nacimiento">
+                    <label for="fecha">Fecha de nacimiento</label>
+                    <input type="date" id="fecha" required />
+                </div>
+
+                <button type="submit">Continuar</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById("modal");
+        const titulo = document.getElementById("titulo-formulario");
+        const descripcion = document.getElementById("descripcion-formulario");
+        const grupoFechaNacimiento = document.getElementById("grupo-fecha-nacimiento");
+
+        function abrirFormulario(tipo) {
+            modal.classList.remove("oculto");
+
+            if (tipo === "registrar") {
+                titulo.textContent = "Crear cuenta nueva";
+                descripcion.textContent = "Ingresa tu información para crear una cuenta.";
+                grupoFechaNacimiento.style.display = 'block';
+            } else {
+                titulo.textContent = "Iniciar sesión";
+                descripcion.textContent = "Ingresa tu información para conectarte.";
+                grupoFechaNacimiento.style.display = 'none';
+            }
+        }
+
+        document.getElementById("formulario").addEventListener("submit", function (e) {
+            e.preventDefault();
+            window.location.href = "clases.html";
+        });
+
+        modal.addEventListener("click", (e) => {
+            if (e.target === modal) {
+                modal.classList.add("oculto");
+            }
+        });
+    </script>
+</body>
+</html>

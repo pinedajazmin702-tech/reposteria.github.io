@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificado de Finalización</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Handlee&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #fce4ec; /* Un suave color rosa pastel */
+            font-family: 'Handlee', cursive, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        .certificado-container {
+            text-align: center;
+            background: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            max-width: 95%;
+            width: 700px;
+            margin-bottom: 30px;
+        }
+
+        .certificado-container h1 {
+            color: #ff8a80;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .certificado-container p {
+            color: #777;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .certificado-img {
+            max-width: 100%;
+            height: auto;
+            border: 2px solid #f8bbd0;
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+
+        .boton-descarga {
+            display: inline-block;
+            background-color: #ffb300;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            font-size: 1.2em;
+        }
+
+        .boton-descarga:hover {
+            background-color: #f57f17;
+            transform: translateY(-3px);
+        }
+
+        /* Diseño responsivo para celulares */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .certificado-container {
+                padding: 30px;
+                border-radius: 10px;
+            }
+            .certificado-container h1 {
+                font-size: 2em;
+                margin-bottom: 15px;
+            }
+            .certificado-container p {
+                font-size: 1em;
+                margin-bottom: 20px;
+            }
+            .boton-descarga {
+                padding: 12px 25px;
+                font-size: 1em;
+                border-radius: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="certificado-container">
+        <h1>¡Felicidades!</h1>
+        <p>Has completado con éxito el curso de repostería básica.</p>
+        <img src="certificado.png" alt="Certificado de Repostería" class="certificado-img">
+        <a href="certificado.png" download="Certificado_Repostería.png" class="boton-descarga">
+            Descargar Certificado
+        </a>
+    </div>
+</body>
+</html>
