@@ -1,326 +1,651 @@
 <!DOCTYPE html>
+
 <html lang="es">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Clases de Repostería</title>
+
     <link rel="stylesheet" href="style.css">
+
     <link href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans:wght@400;700&family=Pacifico&family=Handlee&display=swap" rel="stylesheet">
+
 </head>
+
 <body class="clases-container">
+
     <aside class="menu">
+
         <h3>Lecciones</h3>
+
         <ul id="lista-clases">
+
         </ul>
+
         <div class="porcentaje-avance">
+
             <p>Progreso Total:</p>
+
             <div class="barra-progreso">
+
                 <div id="progreso-relleno" style="width: 0%;">0%</div>
+
             </div>
+
         </div>
+
     </aside>
+
     <main class="contenido">
+
         <div id="contenido-clase">
+
             </div>
+
+
 
         <div id="modal-estrellas" class="modal oculto">
+
             <div class="modal-contenido">
+
                 <h2 id="titulo-estrellas">Resultado de la Prueba</h2>
+
                 <div id="estrellas-display" class="estrellas-display">
+
                 </div>
+
                 <p id="mensaje-estrellas"></p>
+
                 <div id="botones-modal">
+
                 </div>
+
             </div>
+
         </div>
+
     </main>
 
+
+
     <script>
+
         const clases = 7;
+
         const listaClases = document.getElementById("lista-clases");
+
         const contenidoClase = document.getElementById("contenido-clase");
+
         const modalEstrellas = document.getElementById("modal-estrellas");
+
         const estrellasDisplay = document.getElementById("estrellas-display");
+
         const mensajeEstrellas = document.getElementById("mensaje-estrellas");
+
         let leccionesCompletadas = JSON.parse(localStorage.getItem('leccionesCompletadas')) || {};
 
+
+
         const quizzes = {
+
             1: [
+
                 { question: "¿Para qué sirve un tazón (bowl) en repostería?", options: ["A) Para hornear pasteles", "B) Para medir ingredientes", "C) Para enfriar postres", "D) Para mezclar ingredientes secos y húmedos"], correctAnswer: "D) Para mezclar ingredientes secos y húmedos" },
+
                 { question: "¿Qué utensilio se utiliza para medir ingredientes secos como la harina?", options: ["A) Colador", "B) Tazas medidoras", "C) Rodillo", "D) Manga pastelera"], correctAnswer: "B) Tazas medidoras" },
+
                 { question: "¿Cuál de los siguientes utensilios sirve para medir pequeñas cantidades como polvo de hornear?", options: ["A) Cucharas medidoras", "B) Espátula de silicona", "C) Molde para hornear", "D) Tazones"], correctAnswer: "A) Cucharas medidoras" },
+
                 { question: "¿Qué utensilio proporciona una medición más precisa en gramos?", options: ["A) Cucharas medidoras", "B) Batidor de mano", "C) Tazas medidoras", "D) Balanza de cocina"], correctAnswer: "D) Balanza de cocina" },
+
                 { question: "¿Cuál es la función principal del batidor de mano (globo)?", options: ["A) Hornear pasteles", "B) Decorar con crema", "C) Mezclar o batir ingredientes suaves como huevos", "D) Medir azúcar"], correctAnswer: "C) Mezclar o batir ingredientes suaves como huevos" },
+
                 { question: "¿Para qué se utiliza una espátula de silicona?", options: ["A) Para cernir ingredientes", "B) Para cortar masas", "C) Para raspar mezcla de los tazones y mezclar suavemente", "D) Para pesar ingredientes"], correctAnswer: "C) Para raspar mezcla de los tazones y mezclar suavemente" },
+
                 { question: "¿Cuál es la función del colador o tamiz?", options: ["A) Enfriar postres", "B) Cernir ingredientes secos para evitar grumos", "C) Medir líquidos", "D) Batir huevos"], correctAnswer: "B) Cernir ingredientes secos para evitar grumos" },
+
                 { question: "¿Qué utensilio es ideal para estirar masa de galletas o fondant?", options: ["A) Batidora eléctrica", "B) Molde para hornear", "C) Rodillo", "D) Rejilla de enfriamiento"], correctAnswer: "C) Rodillo" },
+
                 { question: "¿Para qué se usa el papel encerado en repostería?", options: ["A) Para medir ingredientes", "B) Para enfriar pasteles", "C) Para evitar que los productos se peguen al molde", "D) Para decorar con crema"], correctAnswer: "C) Para evitar que los productos se peguen al molde" },
+
                 { question: "¿Cuál es la función principal de la manga pastelera con boquillas?", options: ["A) Batir huevos", "B) Medir azúcar", "C) Hornear galletas", "D) Decorar con cremas o rellenos"], correctAnswer: "D) Decorar con cremas o rellenos" },
+
             ],
+
             2: [
+
                 { question: "¿Cuál es el objetivo principal de la clase número 2 del curso de repostería?", options: ["A) Aprender a decorar pasteles.", "B) Diferenciar tipos de harinas y su uso adecuado.", "C) Preparar recetas de panadería.", "D) Usar ingredientes sustitutos del azúcar."], correctAnswer: "B) Diferenciar tipos de harinas y su uso adecuado." },
+
                 { question: "¿Qué beneficio aporta usar el tipo de harina correcto en una receta?", options: ["A) Disminuye el tiempo de cocción.", "B) Mejora la textura, sabor y presentación del postre.", "C) Reduce el costo de los ingredientes.", "D) Aumenta el contenido calórico."], correctAnswer: "B) Mejora la textura, sabor y presentación del postre." },
+
                 { question: "¿Cuál de las siguientes harinas contiene más gluten?", options: ["A) Harina de coco", "B) Harina integral", "C) Harina de fuerza", "D) Harina de avena"], correctAnswer: "C) Harina de fuerza" },
+
                 { question: "¿Para qué tipo de recetas se recomienda la harina de almendra?", options: ["A) Tamales dulces", "B) Macarons y recetas sin gluten", "C) Muffins integrales", "D) Cupcakes esponjosos"], correctAnswer: "B) Macarons y recetas sin gluten" },
+
                 { question: "¿Qué característica tiene la harina integral?", options: ["A) Contiene menos fibra que otras harinas.", "B) Es ideal para recetas tradicionales.", "C) Proviene del grano entero y aporta más sabor.", "D) Se usa principalmente en recetas sin hornear."], correctAnswer: "C) Proviene del grano entero y aporta más sabor." },
+
                 { question: "¿Qué harina es naturalmente libre de gluten y se obtiene de un cereal molido?", options: ["A) Harina de coco", "B) Harina de fuerza", "C) Harina de avena", "D) Harina todo uso"], correctAnswer: "C) Harina de avena" },
+
                 { question: "¿Cuál es la función del gluten en las masas?", options: ["A) Endulzar la mezcla.", "B) Hacer que la masa se enfríe más rápido.", "C) Dar forma, volumen y textura.", "D) Cambiar el color de la masa."], correctAnswer: "C) Dar forma, volumen y textura." },
+
                 { question: "¿Qué harina se recomienda para preparar tamales dulces?", options: ["A) Harina de avena", "B) Harina de almendra", "C) Harina integral", "D) Harina de maíz"], correctAnswer: "D) Harina de maíz" },
+
                 { question: "¿Cuál de estas harinas es más absorbente y aporta sabor especial?", options: ["A) Harina de trigo", "B) Harina de coco", "C) Harina de arroz", "D) Harina todo uso"], correctAnswer: "B) Harina de coco" },
+
                 { question: "¿Qué tipo de harina es ideal para personas con enfermedad celíaca?", options: ["A) Harina de fuerza", "B) Harina de trigo", "C) Mezclas sin gluten (arroz, maíz, papa)", "D) Harina todo uso"], correctAnswer: "C) Mezclas sin gluten (arroz, maíz, papa)" },
+
             ],
+
             3: [
+
                 { question: "¿Qué tipo de levadura se utiliza en repostería para bizcochos, magdalenas o galletas?", options: ["A) Masa madre", "B) Levadura de cerveza", "C) Levadura química (polvo de hornear / \"Royal\")", "D) Levadura seca activa"], correctAnswer: "C) Levadura química (polvo de hornear / \"Royal\")" },
+
                 { question: "¿Para qué sirve generalmente la levadura en repostería casera?", options: ["A) Para aromatizar la masa", "B) Para que la masa suba y quede esponjosa", "C) Para cambiar el color", "D) Para conservar los dulces"], correctAnswer: "B) Para que la masa suba y quede esponjosa" },
+
                 { question: "¿Qué debes hacer antes de hornear si usas levadura química?", options: ["A) Mezclarla con levadura seca", "B) Dejarla reposar 10 minutos", "C) Ninguna de las anteriores", "D) Activarla con azúcar"], correctAnswer: "C) Ninguna de las anteriores" },
+
                 { question: "¿Cuál de estas afirmaciones sobre la levadura seca es correcta?", options: ["A) Se compra en cubitos en la nevera", "B) Se puede usar directamente en la masa sin hidratar", "C) Dura mucho tiempo si se guarda bien cerrada", "D) No es adecuada para repostería"], correctAnswer: "C) Dura mucho tiempo si se guarda bien cerrada" },
+
                 { question: "¿Cuál es la temperatura del agua recomendada para activar levadura seca activa (en masa dulce o pan)?", options: ["A) 70 °C", "B) 60 °C", "C) 32-43 °C (agua tibia)", "D) Agua fría (< 20 °C)"], correctAnswer: "C) 32-43 °C (agua tibia)" },
+
                 { question: "Si una receta requiere 15 g de levadura fresca y no tienes, ¿cuánta levadura seca puedes usar en su lugar?", options: ["A) 6 g", "B) 3 g", "C) 5 g", "D) 15 g"], correctAnswer: "C) 5 g" },
+
                 { question: "¿Qué sucede si pones levadura química en una masa que necesitas fermentar antes de hornear (como pan dulce)?", options: ["A) La masa sube igual", "B) Fermenta más rápido", "C) Sale un pan aromático", "D) No sube debido a falta de fermentación biológica"], correctAnswer: "D) No sube debido a falta de fermentación biológica" },
+
                 { question: "¿Por qué no necesitas esperar tras mezclar levadura química con tu masa antes de hornear?", options: ["A) Porque actúa instantáneamente con el calor", "B) Porque mejora el sabor con el reposo", "C) Porque no está viva", "D) Porque no se activa hasta que se caliente el horno"], correctAnswer: "D) Porque no se activa hasta que se caliente el horno" },
+
                 { question: "¿Qué gas libera la levadura química al reaccionar dentro de la masa para que quede esponjosa durante el horneado?", options: ["A) Oxígeno", "B) Nitrógeno", "C) Vapor de agua", "D) Dióxido de carbono (CO₂)"], correctAnswer: "D) Dióxido de carbono (CO₂)" },
+
                 { question: "¿Qué pasa si en una receta de bizcocho casero no se añade levadura química (polvo de hornear)?", options: ["A) El bizcocho estará más dulce", "B) El bizcocho se dorará en el horno", "C) El bizcocho quedará plano y demasiado denso"], correctAnswer: "C) El bizcocho quedará plano y demasiado denso" },
+
             ],
+
             4: [
+
                 { question: "¿Cuál es el principal método de aireado en el bizcocho genovés?", options: ["A) Usar levadura química.", "B) Batir huevos.", "C) Mezclar con bicarbonato."], correctAnswer: "B) Batir huevos." },
+
                 { question: "¿Qué tipo de bizcocho se caracteriza por ser muy esponjoso y llevar aceite vegetal?", options: ["A) Angel food cake.", "B) Chiffon.", "C) Pound cake."], correctAnswer: "B) Chiffon." },
+
                 { question: "¿Cuál es un uso común del bizcocho esponjoso?", options: ["A) Postres bajos en grasa.", "B) Tartas de capas sin relleno.", "C) Pasteles con relleno de frutas o crema pastelera."], correctAnswer: "C) Pasteles con relleno de frutas o crema pastelera." },
+
                 { question: "¿Qué bizcocho se hace con claras de huevo solamente y es bajo en grasa?", options: ["A) Angel food cake.", "B) Chiffon.", "C) Red velvet."], correctAnswer: "A) Angel food cake." },
+
                 { question: "¿Qué bizcocho tiene cantidades iguales de mantequilla, azúcar, huevos y harina?", options: ["A) Bizcocho húmedo.", "B) Pound cake.", "C) Chiffon."], correctAnswer: "B) Pound cake." },
+
                 { question: "¿Qué ingrediente le da al bizcocho Red Velvet su acidez característica?", options: ["A) Yogurt.", "B) Vinagre o buttermilk.", "C) Clara de huevo."], correctAnswer: "B) Vinagre o buttermilk." },
+
                 { question: "¿Qué tipo de bizcocho se recomienda para pasteles de zanahoria o banano?", options: ["A) Bizcocho húmedo.", "B) Bizcocho esponjoso.", "C) Genovés."], correctAnswer: "A) Bizcocho húmedo." },
+
                 { question: "¿Cuál de estos no lleva levadura química tradicionalmente?", options: ["A) Bizcocho esponjoso.", "B) Genovés.", "C) Pound cake."], correctAnswer: "B) Genovés." },
+
                 { question: "¿Qué bizcocho es ideal para climas cálidos o dietas especiales?", options: ["A) Angel food cake.", "B) Chiffon.", "C) Red velvet."], correctAnswer: "A) Angel food cake." },
+
                 { question: "¿Qué técnica se sugiere para dominar los distintos tipos de bizcocho?", options: ["A) Usar siempre el mismo batido.", "B) Probar una sola receta.", "C) Experimentar, observar el batido, horneado y humedad."], correctAnswer: "C) Experimentar, observar el batido, horneado y humedad." },
+
             ],
+
             5: [
+
                 { question: "¿Cuál es el objetivo de la clase número 5, el Frosting de crema?", options: ["A) Aprender a batir huevos", "B) Preparar un glaseado para cupcakes y pasteles", "C) Hornear galletas", "D) Medir ingredientes"], correctAnswer: "B) Preparar un glaseado para cupcakes y pasteles" },
+
                 { question: "¿Qué ingrediente le da sabor y dulzura al frosting de crema?", options: ["A) Harina de trigo", "B) Azúcar impalpable o azúcar glas", "C) Leche condensada", "D) Huevos"], correctAnswer: "B) Azúcar impalpable o azúcar glas" },
+
                 { question: "¿Cuál es el ingrediente principal que da la base cremosa al frosting?", options: ["A) Mantequilla sin sal", "B) Levadura química", "C) Vainilla", "D) Crema de leche"], correctAnswer: "A) Mantequilla sin sal" },
+
                 { question: "¿Qué ingrediente se usa para darle consistencia y hacer el frosting más suave?", options: ["A) Sal", "B) Harina", "C) Leche o crema de leche", "D) Gelatina"], correctAnswer: "C) Leche o crema de leche" },
+
                 { question: "¿Por qué es importante que la mantequilla esté a temperatura ambiente?", options: ["A) Para que el frosting sea más dulce", "B) Para que se mezcle bien y quede cremoso", "C) Para que el color sea más claro", "D) Para que dure más tiempo"], correctAnswer: "B) Para que se mezcle bien y quede cremoso" },
+
                 { question: "¿Cuál es el propósito del extracto de vainilla en el frosting de crema?", options: ["A) Espesar la mezcla", "B) Darle un sabor agradable", "C) Hacerlo más blanco", "D) Darle más volumen"], correctAnswer: "B) Darle un sabor agradable" },
+
                 { question: "¿Cuál de los siguientes no es un paso para preparar el frosting?", options: ["A) Batir la mantequilla hasta que esté suave", "B) Mezclar el azúcar impalpable con la mantequilla", "C) Hervir la mezcla para que espese", "D) Añadir leche y vainilla al final"], correctAnswer: "C) Hervir la mezcla para que espese" },
+
                 { question: "¿Qué textura debe tener el frosting de crema al final?", options: ["A) Líquida y transparente", "B) Gruesa y granulada", "C) Cremosa y suave, fácil de untar", "D) Dura como piedra"], correctAnswer: "C) Cremosa y suave, fácil de untar" },
+
                 { question: "¿Qué puedes hacer si el frosting de crema está demasiado espeso?", options: ["A) Añadir más azúcar impalpable", "B) Ponerle más mantequilla", "C) Añadir un poco más de leche o crema", "D) Calentarlo en el microondas"], correctAnswer: "C) Añadir un poco más de leche o crema" },
+
                 { question: "¿En qué tipo de postres se usa comúnmente el frosting de crema?", options: ["A) En ensaladas de frutas", "B) En galletas", "C) En tamales", "D) En cupcakes y pasteles"], correctAnswer: "D) En cupcakes y pasteles" },
+
             ],
+
             6: [
+
                 { question: "¿Cuál es el ingrediente principal de la receta del Pan de Banano?", options: ["A) Harina de trigo", "B) Mantequilla", "C) Bananos maduros", "D) Huevos"], correctAnswer: "C) Bananos maduros" },
+
                 { question: "¿Por qué es importante usar bananos maduros en esta receta?", options: ["A) Para que el pan sea más seco", "B) Para que la masa quede más dura", "C) Para que aporten dulzura y humedad natural", "D) Para que el color sea más oscuro"], correctAnswer: "C) Para que aporten dulzura y humedad natural" },
+
                 { question: "¿Qué tipo de harina se utiliza en la receta del Pan de Banano?", options: ["A) Harina de almendra", "B) Harina de coco", "C) Harina todo uso", "D) Harina de fuerza"], correctAnswer: "C) Harina todo uso" },
+
                 { question: "¿Cuál es la función del polvo de hornear y el bicarbonato de sodio en la receta?", options: ["A) Darle sabor al pan", "B) Ayudar a que el pan suba y quede esponjoso", "C) Endulzar la masa", "D) Darle color oscuro"], correctAnswer: "B) Ayudar a que el pan suba y quede esponjoso" },
+
                 { question: "¿Qué debes hacer con la mantequilla antes de mezclarla?", options: ["A) Derretirla", "B) Cortarla en trozos grandes", "C) Dejarla a temperatura ambiente para que se ablande", "D) Congelarla"], correctAnswer: "C) Dejarla a temperatura ambiente para que se ablande" },
+
                 { question: "¿Qué utensilio se utiliza para mezclar los ingredientes secos?", options: ["A) Batidora eléctrica", "B) Cuchillo", "C) Tenedor", "D) Tazón y batidor de mano"], correctAnswer: "D) Tazón y batidor de mano" },
+
                 { question: "¿Cuál es el orden correcto para mezclar los ingredientes líquidos y secos?", options: ["A) Mezclar líquidos primero, luego añadir secos", "B) Mezclar secos primero, luego añadir líquidos", "C) Mezclar todos juntos a la vez", "D) No importa el orden"], correctAnswer: "A) Mezclar líquidos primero, luego añadir secos" },
+
                 { question: "¿Qué puedes añadir a la masa para darle más sabor y textura?", options: ["A) Hielo", "B) Papel encerado", "C) Chispas de chocolate, nueces o pasas", "D) Sal"], correctAnswer: "C) Chispas de chocolate, nueces o pasas" },
+
                 { question: "¿Cuál es el tiempo de horneado aproximado para el Pan de Banano?", options: ["A) 15 minutos", "B) 30 minutos", "C) 50-60 minutos", "D) 90 minutos"], correctAnswer: "C) 50-60 minutos" },
+
                 { question: "¿Qué debes hacer antes de cortar el pan de banano?", options: ["A) Comerlo caliente", "B) Dejarlo enfriar completamente para evitar que se desmorone", "C) Ponerle más azúcar", "D) Guardarlo en el congelador"], correctAnswer: "B) Dejarlo enfriar completamente para que se desmorone" },
+
             ],
+
             7: [
+
                 { question: "¿Cuál es el ingrediente principal de la receta de Muffins de Zanahoria?", options: ["A) Harina de trigo", "B) Zanahoria rallada", "C) Huevos", "D) Aceite vegetal"], correctAnswer: "B) Zanahoria rallada" },
+
                 { question: "¿Qué especia es clave para el sabor característico de los muffins de zanahoria?", options: ["A) Canela en polvo", "B) Pimienta", "C) Nuez moscada", "D) Jengibre molido"], correctAnswer: "A) Canela en polvo" },
+
                 { question: "¿Qué tipo de harina se utiliza en la receta de Muffins de Zanahoria?", options: ["A) Harina de almendra", "B) Harina de coco", "C) Harina todo uso", "D) Harina de fuerza"], correctAnswer: "C) Harina todo uso" },
+
                 { question: "¿Cuál es la función del aceite vegetal en la receta?", options: ["A) Endulzar la masa", "B) Proporcionar humedad y hacer los muffins más tiernos", "C) Aportar color", "D) Ayudar a que la masa suba"], correctAnswer: "B) Proporcionar humedad y hacer los muffins más tiernos" },
+
                 { question: "¿Qué ingrediente se utiliza para darle una textura suave a los muffins?", options: ["A) Mantequilla derretida", "B) Leche", "C) Yogurt o buttermilk", "D) Agua"], correctAnswer: "C) Yogurt o buttermilk" },
+
                 { question: "¿Qué utensilio es ideal para mezclar los ingredientes húmedos y secos sin batir de más?", options: ["A) Batidora eléctrica", "B) Cuchara o espátula", "C) Tenedor", "D) Cuchillo"], correctAnswer: "B) Cuchara o espátula" },
+
                 { question: "¿Cuál es el orden correcto para mezclar los ingredientes?", options: ["A) Mezclar primero los líquidos, luego los secos", "B) Mezclar todos juntos", "C) Mezclar primero los secos, luego los líquidos", "D) No importa el orden"], correctAnswer: "A) Mezclar primero los líquidos, luego los secos" },
+
                 { question: "¿Qué puedes agregar a los muffins para darles un toque extra de sabor?", options: ["A) Chocolate en polvo", "B) Hielo", "C) Nueces picadas o pasas", "D) Jengibre molido"], correctAnswer: "C) Nueces picadas o pasas" },
+
                 { question: "¿Qué debes hacer para preparar los moldes antes de verter la masa?", options: ["A) Engrasarlos y enharinarlos", "B) Ponerlos en el congelador", "C) Llenarlos hasta el borde con la masa", "D) Lavarlos y secarlos"], correctAnswer: "A) Engrasarlos y enharinarlos" },
+
                 { question: "¿Cuál es el tiempo de horneado aproximado para los Muffins de Zanahoria?", options: ["A) 10-15 minutos", "B) 20-25 minutos", "C) 35-40 minutos", "D) 50 minutos"], correctAnswer: "B) 20-25 minutos" },
+
             ],
+
         };
 
+
+
         function shuffleArray(array) {
+
             for (let i = array.length - 1; i > 0; i--) {
+
                 const j = Math.floor(Math.random() * (i + 1));
+
                 [array[i], array[j]] = [array[j], array[i]];
+
             }
+
         }
-        
+
+        
+
         function actualizarMenu() {
+
             listaClases.innerHTML = "";
+
             let totalProgreso = 0;
+
             let leccionDesbloqueada = true;
 
+
+
             for (let i = 1; i <= clases; i++) {
+
                 const li = document.createElement("li");
+
                 const estrellas = (leccionesCompletadas[i] && leccionesCompletadas[i].estrellas) || 0;
+
                 const porcentaje = (estrellas / 3) * 100;
 
+
+
                 if (leccionDesbloqueada) {
+
                     li.innerHTML = `
+
                         <a href="#" onclick="mostrarPrueba(${i})">
+
                             Prueba Lección ${i}
+
                             <span class="progreso-clase">(${'★'.repeat(estrellas)}${'☆'.repeat(3 - estrellas)})</span>
+
                         </a>
+
                     `;
+
                 } else {
+
                     li.innerHTML = `
+
                         <a href="#" class="bloqueado">
+
                             Prueba Lección ${i}
+
                             <span class="progreso-clase">(Bloqueada)</span>
+
                         </a>
+
                     `;
+
                 }
+
+
 
                 listaClases.appendChild(li);
+
                 if (estrellas < 2) {
+
                     leccionDesbloqueada = false;
+
                 }
-                
+
+                
+
                 totalProgreso += estrellas;
+
             }
+
+
 
             const progresoTotal = (totalProgreso / (clases * 3)) * 100;
+
             const progresoRelleno = document.getElementById("progreso-relleno");
+
             progresoRelleno.style.width = `${progresoTotal}%`;
+
             progresoRelleno.textContent = `${progresoTotal.toFixed(0)}%`;
 
+
+
             // Agregar enlace al certificado si se completa la última lección
+
             const certItem = document.getElementById("certificado-item");
+
             if (leccionesCompletadas[clases] && leccionesCompletadas[clases].estrellas >= 2) {
+
                 if (!certItem) {
+
                     const cert = document.createElement("li");
+
                     cert.id = "certificado-item";
+
                     cert.innerHTML = `<a href="certificado.html">Generar Certificado</a>`;
+
                     listaClases.appendChild(cert);
+
                 } else {
+
                     certItem.style.display = "block";
+
                 }
+
             } else if (certItem) {
+
                 certItem.style.display = "none";
+
             }
+
         }
-        
+
+        
+
         function mostrarPrueba(claseNum) {
+
             if (claseNum > 1 && (!leccionesCompletadas[claseNum - 1] || leccionesCompletadas[claseNum - 1].estrellas < 2)) {
+
                 contenidoClase.innerHTML = `
+
                     <h2 class="titulo-quiz" style="color: var(--color-secundario);">Lección Bloqueada</h2>
+
                     <p style="color: var(--color-texto);">Debes completar la prueba de la lección anterior con al menos 2 estrellas para desbloquear esta lección.</p>
+
                 `;
+
                 return;
+
             }
-            
+
+            
+
             contenidoClase.innerHTML = "";
+
             const quizOriginal = quizzes[claseNum];
+
             if (quizOriginal) {
+
                 const quiz = [...quizOriginal];
+
                 shuffleArray(quiz);
 
+
+
                 const quizHTML = document.createElement("div");
+
                 quizHTML.className = "quiz";
+
                 quizHTML.innerHTML = `<h3 class="titulo-quiz">Cuestionario de la Lección ${claseNum}</h3>`;
 
+
+
                 let formHTML = `<form id="quiz-form-${claseNum}">`;
+
                 quiz.forEach((q, index) => {
+
                     formHTML += `
+
                         <div class="pregunta">
+
                             <p>${index + 1}. ${q.question}</p>
+
                             <div class="opciones">
+
                                 ${q.options.map(option => `
+
                                     <label>
+
                                         <input type="radio" name="pregunta${index}" value="${option}">
+
                                         <span>${option}</span>
+
                                     </label>
+
                                 `).join('')}
+
                             </div>
+
                         </div>
+
                     `;
+
                 });
+
                 formHTML += `<button type="submit">Enviar Respuestas</button></form>`;
 
+
+
                 quizHTML.innerHTML += formHTML;
+
                 contenidoClase.appendChild(quizHTML);
 
+
+
                 document.getElementById(`quiz-form-${claseNum}`).addEventListener("submit", (e) => {
+
                     e.preventDefault();
+
                     corregirPrueba(claseNum, quiz);
+
                 });
+
             } else {
+
                 contenidoClase.innerHTML = `<p>Cuestionario no disponible para esta lección.</p>`;
+
             }
+
         }
+
+
 
         function corregirPrueba(claseNum, quiz) {
+
             const form = document.getElementById(`quiz-form-${claseNum}`);
+
             let correctas = 0;
+
             quiz.forEach((q, index) => {
+
                 const selectedOption = form.querySelector(`input[name="pregunta${index}"]:checked`);
+
                 if (selectedOption && selectedOption.value === q.correctAnswer) {
+
                     correctas++;
+
                 }
+
             });
 
+
+
             const estrellasObtenidas = (correctas >= 10) ? 3 : (correctas >= 7) ? 2 : (correctas >= 1) ? 1 : 0;
-            
+
+            
+
             leccionesCompletadas[claseNum] = { estrellas: estrellasObtenidas };
+
             localStorage.setItem('leccionesCompletadas', JSON.stringify(leccionesCompletadas));
+
             actualizarMenu();
 
+
+
             mostrarModalEstrellas(estrellasObtenidas, correctas, claseNum);
+
         }
 
+
+
         function mostrarModalEstrellas(estrellasObtenidas, correctas, claseNum) {
+
             let estrellasHTML = "";
+
             let mensaje = "";
-            
+
+            
+
             estrellasHTML = `<span class="estrella-vacia">&#9734;</span>`.repeat(3);
+
             if (estrellasObtenidas >= 1) {
+
                 estrellasHTML = `<span class="estrella">&#9733;</span><span class="estrella-vacia">&#9734;</span><span class="estrella-vacia">&#9734;</span>`;
+
             }
+
             if (estrellasObtenidas >= 2) {
+
                 estrellasHTML = `<span class="estrella">&#9733;</span><span class="estrella">&#9733;</span><span class="estrella-vacia">&#9734;</span>`;
-            }
-            if (estrellasObtenidas === 3) {
-                estrellasHTML = `<span class="estrella">&#9733;</span><span class="estrella">&#9733;</span><span class="estrella">&#9733;</span>`;
+
             }
 
             if (estrellasObtenidas === 3) {
-                mensaje = `¡Felicidades! Has completado la prueba perfectamente con ${correctas} respuestas correctas.`;
-            } else if (estrellasObtenidas === 2) {
-                mensaje = `Buen trabajo, obtuviste ${correctas} respuestas correctas.`;
-            } else if (estrellasObtenidas === 1) {
-                mensaje = `Solo obtuviste ${correctas} respuestas correctas. Inténtalo de nuevo para mejorar tu resultado.`;
-            } else {
-                mensaje = `No obtuviste respuestas correctas. Sigue intentando para mejorar.`;
+
+                estrellasHTML = `<span class="estrella">&#9733;</span><span class="estrella">&#9733;</span><span class="estrella">&#9733;</span>`;
+
             }
+
+
+
+            if (estrellasObtenidas === 3) {
+
+                mensaje = `¡Felicidades! Has completado la prueba perfectamente con ${correctas} respuestas correctas.`;
+
+            } else if (estrellasObtenidas === 2) {
+
+                mensaje = `Buen trabajo, obtuviste ${correctas} respuestas correctas.`;
+
+            } else if (estrellasObtenidas === 1) {
+
+                mensaje = `Solo obtuviste ${correctas} respuestas correctas. Inténtalo de nuevo para mejorar tu resultado.`;
+
+            } else {
+
+                mensaje = `No obtuviste respuestas correctas. Sigue intentando para mejorar.`;
+
+            }
+
+
+
 
 
             document.getElementById('titulo-estrellas').textContent = `Resultado de la Prueba ${claseNum}`;
+
             estrellasDisplay.innerHTML = estrellasHTML;
+
             mensajeEstrellas.textContent = mensaje;
 
+
+
             const botonesModal = document.getElementById("botones-modal");
+
             botonesModal.innerHTML = '';
-            
+
+            
+
             if(estrellasObtenidas >= 2) {
+
                 botonesModal.innerHTML += `<button onclick="cerrarModalEstrellas()">Continuar</button>`;
+
             } else {
+
                 botonesModal.innerHTML += `<button onclick="reintentarQuiz(${claseNum})">Reintentar</button>`;
+
             }
-            
+
+            
+
             modalEstrellas.classList.remove('oculto');
+
         }
-        
+
+        
+
         function reintentarQuiz(claseNum) {
+
             cerrarModalEstrellas();
+
             mostrarPrueba(claseNum);
+
         }
+
+
 
         function cerrarModalEstrellas() {
+
             modalEstrellas.classList.add('oculto');
+
         }
 
+
+
         document.addEventListener("DOMContentLoaded", () => {
+
             actualizarMenu();
+
             mostrarPrueba(1);
+
             modalEstrellas.addEventListener("click", (e) => {
+
                 if (e.target === modalEstrellas) {
+
                     cerrarModalEstrellas();
+
                 }
+
             });
+
         });
+
     </script>
+
 </body>
+
 </html>
